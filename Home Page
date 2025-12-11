@@ -1,42 +1,96 @@
+---
+title: CMPN202 Operating Systems – Technical Journal
+---
+
 # CMPN202 Operating Systems – Technical Journal
 
-**Student Name:** Jonathan Matuka   
-**Student ID:** MAT23593441  
+**Student Name:** [Your Name]  
+**Student ID:** [Your Student ID]  
+**Programme:** [e.g. BSc/BEng Software Engineering]  
 **Module:** CMPN202 – Operating Systems  
-**Programme:** Software Engineering  
-**Academic Year:** 2025/26  
-
-This GitHub Pages site documents my 7-week technical journal for the Operating Systems coursework.  
-The journal shows:
-
-- How I planned, configured, secured, and evaluated a Linux server and workstation.
-- Evidence of command-line use (SSH, security tools, monitoring, scripting).
-- Performance and security analysis, including trade-offs and reflections.
-- Weekly progress, problems encountered, and how I solved them.
-
-> Note: All work is performed in a VirtualBox environment using a headless Linux server accessed via SSH from a workstation system, in line with the coursework specification.
+**Academic Year:** [e.g. 2025/26]
 
 ---
 
-## Table of Contents (Weeks 1–7)
+## About This Site
 
-- [Week 1 – System Planning & Distribution Selection](./week1.md)
-- [Week 2 – Security Planning & Testing Methodology](./week2.md)
-- [Week 3 – Application Selection for Performance Testing](./week3.md)
-- [Week 4 – Initial System Configuration & Security Implementation](./week4.md)
-- [Week 5 – Advanced Security & Monitoring Infrastructure](./week5.md)
-- [Week 6 – Performance Evaluation & Analysis](./week6.md)
-- [Week 7 – Security Audit & System Evaluation](./week7.md)
+This GitHub Pages site is my **7-week technical journal** for the CMPN202 Operating Systems coursework.
+
+It documents how I:
+
+- Planned and built a **virtualised server + workstation** environment using VirtualBox.
+- Administered a **headless Linux server** entirely via the command line and SSH.
+- Configured **security controls** (SSH hardening, firewall, MAC, fail2ban, automatic updates).
+- Designed and ran **performance tests** for selected applications.
+- Performed a final **security audit and system evaluation**.
+
+Each week has its own page with:
+
+- Objectives  
+- Commands and configuration steps  
+- Screenshots / evidence  
+- Analysis (performance / security / trade-offs)  
+- Reflection on what I learned  
 
 ---
 
-## How to Read this Journal
+## Weekly Journal Pages
 
-Each weekly page contains:
+> Click a week to open its page.
 
-1. **Objectives for the week** – what I aimed to achieve.
-2. **Implementation details** – commands, configurations, scripts, and screenshots.
-3. **Analysis** – performance, security, and trade-offs.
-4. **Reflection** – what I learned, what went wrong, and what I would improve.
+- [Week 1 – System Planning & Distribution Selection](week1.md)
+- [Week 2 – Security Planning & Testing Methodology](week2.md)
+- [Week 3 – Application Selection for Performance Testing](week3.md)
+- [Week 4 – Initial System Configuration & Security Implementation](week4.md)
+- [Week 5 – Advanced Security & Monitoring Infrastructure](week5.md)
+- [Week 6 – Performance Evaluation & Analysis](week6.md)
+- [Week 7 – Security Audit & System Evaluation](week7.md)
 
-All command-line screenshots show the prompt (`username@hostname`) and are taken from the VirtualBox environment.
+---
+
+## Quick Navigation
+
+- [Go to Week 1](week1.md) – Environment planning, distro choice, VirtualBox networking, baseline system specs.  
+- [Go to Week 2](week2.md) – Security plan, threat model, performance testing strategy.  
+- [Go to Week 3](week3.md) – Application selection and installation for performance testing.  
+- [Go to Week 4](week4.md) – SSH keys, firewall rules, non-root admin user, remote administration.  
+- [Go to Week 5](week5.md) – MAC, automatic updates, fail2ban, security/monitoring scripts.  
+- [Go to Week 6](week6.md) – Performance tests, metrics, graphs, bottleneck analysis, optimisations.  
+- [Go to Week 7](week7.md) – Lynis audit, nmap scan, service review, final system evaluation.
+
+---
+
+## How This Journal Is Structured
+
+Each weekly page follows a consistent structure:
+
+1. **Weekly Overview** – What that week focused on.  
+2. **Objectives** – What I planned to achieve.  
+3. **Implementation** – Commands, configuration changes, scripts.  
+4. **Evidence** – Screenshots and CLI outputs.  
+5. **Analysis** – Performance or security implications, trade-offs.  
+6. **Problems & Solutions** – Issues I faced and how I fixed them.  
+7. **Reflection** – What I learned and how it links to Operating Systems concepts.
+
+This structure makes it easy to see my progress and how the system evolved over time.
+
+---
+
+## Technologies & Tools Used
+
+- **Virtualisation:** Oracle VirtualBox  
+- **Server OS:** [e.g. Ubuntu Server 22.04 LTS]  
+- **Workstation:** [e.g. Ubuntu Desktop / Windows host with SSH client]  
+- **Remote Access:** OpenSSH (key-based authentication)  
+- **Security:** Firewall (e.g. ufw), AppArmor/SELinux, fail2ban, unattended-upgrades  
+- **Monitoring & Performance:** `htop`, `vmstat`, `iostat`, `ss`, custom scripts  
+- **Audit:** Lynis, nmap  
+
+---
+
+## Notes for Markers
+
+- All work is performed in a **VirtualBox lab environment** as specified in the coursework brief.
+- The server is administered **exclusively via SSH**, using a workstation system.
+- Screenshots and command outputs are placed on the weekly pages as evidence.
+- This homepage provides an overview and links directly to each weekly journal entry.
