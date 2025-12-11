@@ -1,15 +1,9 @@
-
----
-
-## Week 5 – `week5.md`
-
-```markdown
-# Week 5 – Advanced Security & Monitoring Infrastructure
+# Week 4 – Initial System Configuration & Security Implementation
 
 ## 1. Weekly Overview
 
 **Focus of this week:**  
-Enhance security using MAC (SELinux/AppArmor), automatic updates, fail2ban, and write scripts for security baselines and monitoring.
+Begin applying concrete security measures to the server, including SSH hardening, firewall configuration, and proper user/privilege management, all accessed via the command line.
 
 **Date range:** [dd/mm/yyyy – dd/mm/yyyy]
 
@@ -17,27 +11,20 @@ Enhance security using MAC (SELinux/AppArmor), automatic updates, fail2ban, and 
 
 ## 2. Weekly Objectives
 
-1. Enable and configure SELinux/AppArmor (depending on distro).
-2. Configure automatic security updates.
-3. Install and configure fail2ban to protect SSH.
-4. Implement and test `security-baseline.sh` (server) and `monitor-server.sh` (workstation).
+By the end of this week, I aimed to:
+
+1. Configure SSH to use key-based authentication instead of passwords.
+2. Restrict access to the server using a firewall, limiting SSH to the workstation.
+3. Create and use a non-root administrative user for day-to-day administration.
+4. Demonstrate that I can fully administer the server remotely via SSH.
 
 ---
 
-## 3. Mandatory Access Control (MAC)
+## 3. SSH Key-Based Authentication
 
-### 3.1 Choice and Mode
+### 3.1 Key Generation on Workstation
 
-- MAC framework: [SELinux / AppArmor]
-- Mode: [Enforcing / Permissive]
-- Reason for this choice: [e.g. supported by distro, easier to configure, etc.]
-
-### 3.2 Commands & Status
+On the workstation, I generated an SSH key pair:
 
 ```bash
-# Example for AppArmor
-sudo aa-status
-
-# Example for SELinux
-sestatus
-
+ssh-keygen -t ed25519 -C "[your_key_comment]"
