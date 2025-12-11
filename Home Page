@@ -1,0 +1,42 @@
+# CMPN202 Operating Systems – Technical Journal
+
+**Student Name:** Jonathan Matuka   
+**Student ID:** MAT23593441  
+**Module:** CMPN202 – Operating Systems  
+**Programme:** Software Engineering  
+**Academic Year:** 2025/26  
+
+This GitHub Pages site documents my 7-week technical journal for the Operating Systems coursework.  
+The journal shows:
+
+- How I planned, configured, secured, and evaluated a Linux server and workstation.
+- Evidence of command-line use (SSH, security tools, monitoring, scripting).
+- Performance and security analysis, including trade-offs and reflections.
+- Weekly progress, problems encountered, and how I solved them.
+
+> Note: All work is performed in a VirtualBox environment using a headless Linux server accessed via SSH from a workstation system, in line with the coursework specification.
+
+---
+
+## Table of Contents (Weeks 1–7)
+
+- [Week 1 – System Planning & Distribution Selection](./week1.md)
+- [Week 2 – Security Planning & Testing Methodology](./week2.md)
+- [Week 3 – Application Selection for Performance Testing](./week3.md)
+- [Week 4 – Initial System Configuration & Security Implementation](./week4.md)
+- [Week 5 – Advanced Security & Monitoring Infrastructure](./week5.md)
+- [Week 6 – Performance Evaluation & Analysis](./week6.md)
+- [Week 7 – Security Audit & System Evaluation](./week7.md)
+
+---
+
+## How to Read this Journal
+
+Each weekly page contains:
+
+1. **Objectives for the week** – what I aimed to achieve.
+2. **Implementation details** – commands, configurations, scripts, and screenshots.
+3. **Analysis** – performance, security, and trade-offs.
+4. **Reflection** – what I learned, what went wrong, and what I would improve.
+
+All command-line screenshots show the prompt (`username@hostname`) and are taken from the VirtualBox environment.
