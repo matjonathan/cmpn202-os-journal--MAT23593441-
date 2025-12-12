@@ -1,14 +1,11 @@
----
-title: CMPN202 Operating Systems – Technical Journal
----
 
 # CMPN202 Operating Systems – Technical Journal
 
-**Student Name:** [Your Name]  
-**Student ID:** [Your Student ID]  
-**Programme:** [e.g. BSc/BEng Software Engineering]  
-**Module:** CMPN202 – Operating Systems  
-**Academic Year:** [e.g. 2025/26]
+**Student Name:** Jonathan Matuka  
+**Student ID:** MAT23593441  
+**Programme:** BEng Software Engineering  
+**Module:** Operating Systems  
+**Academic Year:** 2025/26
 
 ---
 
