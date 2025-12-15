@@ -20,26 +20,72 @@ Select and install applications that will generate meaningful workloads (CPU, me
 
 ## 3. Application Selection Matrix
 
-Use this table to justify each choice.
+The following applications were selected to represent different workload types commonly encountered on Linux servers. This allows operating system behaviour to be evaluated under varied and realistic conditions.
 
-| Application | Category (CPU/RAM/I/O/Network/Server) | Why I chose it | Expected use case |
-|------------|----------------------------------------|----------------|-------------------|
-| [App 1]    | [e.g. CPU-intensive]                   | [Reason]       | [Scenario]        |
-| [App 2]    | [e.g. Disk I/O]                        | [Reason]       | [Scenario]        |
-| [App 3]    | [e.g. Network server]                  | [Reason]       | [Scenario]        |
-| [App 4]    | [e.g. Database / mixed]                | [Reason]       | [Scenario]        |
+| Application | Category | Why I Chose It | Expected Use Case |
+|------------|----------|---------------|------------------|
+| stress-ng | CPU / RAM intensive | Designed specifically to stress CPU cores and memory, making it ideal for controlled load testing | Simulating high CPU and memory pressure to analyse scheduling and resource allocation |
+| fio | Disk I/O intensive | Industry-standard benchmarking tool for testing disk read/write performance | Evaluating disk throughput, latency, and I/O wait under synthetic workloads |
+| iperf3 | Network intensive | Widely used tool for measuring network throughput and performance | Testing bandwidth and network performance between workstation and server |
+| nginx | Server / mixed workload | Lightweight and commonly used web server | Simulating a real server application handling client requests |
 
 ---
 
-## 4. Installation & Configuration Steps
+## 4. Installation and Configuration Steps
 
-For each application, record installation and any config changes.
+All applications were installed on the server via SSH using the command line. No graphical tools were used.
 
-### 4.1 [Application 1 – Name]
+### 4.1 stress-ng (CPU and Memory Testing)
 
 **Commands executed:**
 
-```bash
-sudo apt update
-sudo apt install [package-name]
-# Any extra commands
+- sudo apt update
+- sudo apt install stress-ng
+
+
+
+**Configuration notes:**  
+No additional configuration is required. Workload parameters (CPU cores, memory usage, duration) will be specified at runtime during testing.
+
+---
+
+### 4.2 fio (Disk I/O Testing)
+
+**Commands executed:**
+
+- sudo apt update
+- sudo apt install fio
+
+  
+**Configuration notes:**  
+Disk I/O behaviour will be defined using command-line options during testing to simulate sequential and random read/write workloads.
+
+---
+
+### 4.3 iperf3 (Network Performance Testing)
+
+**Commands executed:**
+
+- sudo apt update
+- sudo apt install iperf3
+
+  
+**Configuration notes:**  
+The server will run `iperf3` in server mode during network tests, while the workstation will act as the client.
+
+---
+
+### 4.4 nginx (Server Application)
+
+**Commands executed:**
+
+- sudo apt update
+- sudo apt install nginx
+
+  
+**Configuration notes:**  
+The default nginx configuration will be used initially to provide a baseline. Any later configuration changes will be documented and justified during performance optimisation testing.
+
+---
+
+These applications provide a balanced mix of synthetic and real-world workloads, enabling comprehensive performance evaluation in later phases of the coursework.
