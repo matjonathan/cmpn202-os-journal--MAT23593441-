@@ -5,7 +5,6 @@
 **Focus of this week:**  
 Plan security controls and performance testing strategy before heavy configuration.
 
-**Date range:** [dd/mm/yyyy – dd/mm/yyyy]
 
 ---
 
@@ -79,46 +78,65 @@ This structured approach enables accurate comparison between idle and stressed s
 
 ### 4.1 SSH Hardening Plan
 
-I intend to:
+To reduce the attack surface of the server and secure remote administration, the following SSH hardening measures are planned:
 
-- Use **key-based authentication** instead of passwords.
-- Disable root login over SSH.
-- (Optional) Change the SSH port from 22 to [port].
+- Use key-based authentication instead of password-based authentication to prevent brute-force attacks.
+- Disable root login over SSH to ensure administrative access is performed through a non-root user with sudo privileges.
+- Change the default SSH port from 22 to a non-standard port to reduce exposure to automated scanning (used as a supplementary control).
 
-Planned config items in `/etc/ssh/sshd_config`:
+**Planned configuration settings in `/etc/ssh/sshd_config`:**
 
-- `PermitRootLogin no`
-- `PasswordAuthentication no`
-- [Any other SSH options I plan to use]
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+AllowUsers adminuser
+LoginGraceTime 30
+MaxAuthTries 3
+
+
+These settings enforce strong authentication, limit login attempts, and minimise the risk of unauthorised access.
+
+---
 
 ### 4.2 Firewall Strategy
 
-Firewall tool: [ufw / iptables / firewalld]
+**Firewall tool:** UFW (Uncomplicated Firewall)
 
-Policy:
+UFW is selected because it is lightweight, command-line driven, and fully supported on Ubuntu Server, making it suitable for controlled and auditable firewall management.
 
-- Default incoming: [deny]
-- Default outgoing: [allow]
-- Allow SSH **only** from workstation IP: `192.168.[X].[workstation]`
-- Deny all other inbound traffic by default.
+**Firewall policy:**
+
+- Default incoming traffic: **deny**
+- Default outgoing traffic: **allow**
+- Allow SSH access only from the trusted workstation IP address `192.168.56.10`
+- Deny all other inbound traffic by default
+
+This configuration ensures that the server is only accessible from the authorised workstation while preventing all other unsolicited network traffic.
+
+---
 
 ### 4.3 Mandatory Access Control (MAC)
 
-Planned MAC tool: [AppArmor / SELinux]
+**Planned MAC framework:** AppArmor  
+**Mode:** Enforcing
 
-- Mode: [Enforcing / Permissive]
-- Reason for this choice:
-  - [e.g. “Supported by my distro”, “Easier profile management”, etc.]
+AppArmor is chosen because it is enabled by default on Ubuntu Server and provides application-level confinement using human-readable security profiles.
 
-Main idea:
+The main objective of using mandatory access control is to confine services so that, if one service is compromised, its ability to access unauthorised files, system resources, or other services is restricted. This limits the overall impact of a security breach.
 
-- Confine services so that if one is compromised, its ability to damage the rest of the system is limited.
+---
 
-### 4.4 Automatic Updates & Extra Controls
+### 4.4 Automatic Updates and Additional Security Controls
 
-- Auto security updates using: [e.g. `unattended-upgrades`]
-- Intrusion/brute-force protection: [fail2ban or similar]
-- Logging plan: [which logs I will use later, e.g. `/var/log/auth.log`, `/var/log/syslog`]
+- Automatic security updates will be configured using `unattended-upgrades` to ensure critical security patches are applied without manual intervention.
+- Intrusion and brute-force protection will be implemented using `fail2ban`, which monitors authentication activity and automatically blocks IP addresses exhibiting repeated failed login attempts.
+- System logging will be used to support later security auditing and analysis. The following logs will be monitored:
+  - `/var/log/auth.log` – authentication and SSH activity
+  - `/var/log/syslog` – general system events and service activity
+  - `fail2ban` logs – intrusion detection events
+
+These controls collectively strengthen system security while maintaining a professional headless server administration model.
+
 
 ---
 
@@ -126,70 +144,131 @@ Main idea:
 
 ### 5.1 Environment Description
 
-- Server reachable only from workstation via host-only network.
-- NAT provides Internet for package updates but not inbound Internet connections.
-- Single student administrator (me) with sudo access.
+The system is deployed in an isolated VirtualBox environment with the following characteristics:
 
-### 5.2 Threats & Mitigations
+- The server is reachable only from the workstation via a host-only network.
+- NAT networking is used solely to provide outbound Internet access for package updates and does not permit inbound Internet connections.
+- There is a single student administrator account with `sudo` privileges.
+- All system administration is performed remotely over SSH.
 
-**Threat 1: [e.g. Brute-force SSH Attack]**
+This controlled environment significantly reduces external attack vectors but still requires strong internal security controls.
 
-- Scenario: [An attacker guesses passwords over SSH.]
-- Impact: [Full server compromise if successful.]
-- Likelihood in this environment: [Low/Medium/High]
-- Planned mitigations:
-  - Key-based authentication.
-  - Disable password logins.
-  - Firewall restricting SSH to one IP.
-  - Fail2ban monitoring SSH login attempts.
+---
 
-**Threat 2: [e.g. Misconfigured Firewall]**
+### 5.2 Threats and Mitigations
 
-- Scenario: [Accidentally opening unnecessary ports to the host-only network.]
-- Impact: [Unnecessary attack surface, increased risk.]
-- Mitigations:
-  - Default deny policy.
-  - Documented rule set.
-  - Regular checks (`sudo ufw status` or equivalent).
+#### Threat 1: Brute-Force SSH Attack
 
-**Threat 3: [e.g. Privilege Escalation]**
+**Scenario:**  
+An attacker attempts to gain access by repeatedly guessing SSH login credentials.
 
-- Scenario: [A user misuses sudo or exploits misconfigured sudo rules.]
-- Impact: [Root-level compromise from a user account.]
-- Mitigations:
-  - Minimal sudo privileges.
-  - Careful editing of `/etc/sudoers`.
-  - Use of strong passwords and key-based auth.
+**Impact:**  
+Successful compromise could result in full administrative access to the server.
 
-(Optional: add more threats like weak logging, software vulnerabilities, etc.)
+**Likelihood in this environment:**  
+Low, due to the isolated host-only network and restricted SSH access, but still possible through misconfiguration or internal threats.
+
+**Planned mitigations:**
+- Enforce SSH key-based authentication.
+- Disable password-based SSH logins.
+- Disable root login over SSH.
+- Restrict SSH access to a single trusted workstation IP using the firewall.
+- Implement `fail2ban` to monitor and block repeated failed login attempts.
+
+---
+
+#### Threat 2: Misconfigured Firewall Rules
+
+**Scenario:**  
+Firewall rules are incorrectly configured, unintentionally exposing unnecessary ports or services on the host-only network.
+
+**Impact:**  
+Increased attack surface and potential unauthorised access to services.
+
+**Likelihood in this environment:**  
+Medium, as firewall misconfiguration is a common administrative error.
+
+**Planned mitigations:**
+- Apply a default deny policy for all incoming traffic.
+- Explicitly allow only required services (SSH).
+- Maintain a documented firewall ruleset.
+- Regularly verify firewall status using commands such as `sudo ufw status`.
+
+---
+
+#### Threat 3: Privilege Escalation
+
+**Scenario:**  
+A user account misuses sudo privileges or exploits incorrectly configured sudo rules to gain root-level access.
+
+**Impact:**  
+Complete system compromise and loss of system integrity.
+
+**Likelihood in this environment:**  
+Low, as only one administrative user exists, but still possible due to configuration errors.
+
+**Planned mitigations:**
+- Follow the principle of least privilege for sudo access.
+- Carefully configure and audit `/etc/sudoers`.
+- Enforce strong authentication using SSH keys.
+- Avoid unnecessary elevation of privileges during routine administration.
+
+---
+
+#### Threat 4: Unpatched Software Vulnerabilities
+
+**Scenario:**  
+Outdated packages contain known vulnerabilities that can be exploited.
+
+**Impact:**  
+Potential remote code execution, data compromise, or service disruption.
+
+**Likelihood in this environment:**  
+Medium, as vulnerabilities regularly emerge in system packages.
+
+**Planned mitigations:**
+- Enable automatic security updates using `unattended-upgrades`.
+- Regularly review installed packages and update as required.
+- Conduct periodic security audits in later phases.
+
+---
+
+This threat model informs the security configuration decisions implemented in later weeks and ensures that security controls are proportionate to the identified risks.
 
 ---
 
 ## 6. Mapping to Coursework Phases
 
-Explain how this week’s planning supports later phases:
+This week focused on planning and design, which directly supports the implementation and evaluation phases later in the coursework.
 
-- Links to **Week 4–5**:
-  - SSH, firewall, MAC, fail2ban, and automatic updates will be implemented and documented there.
-- Links to **Week 6**:
-  - Performance testing plan here will guide the tests and metrics I run later.
-- Links to **Week 7**:
-  - Threat model informs what I check during the security audit (Lynis, nmap, etc.).
+**Links to Weeks 4–5 (Security Implementation):**  
+The SSH hardening plan, firewall strategy, mandatory access control decisions, fail2ban configuration, and automatic update strategy defined in this week will be implemented and documented during Weeks 4 and 5. Having these controls planned in advance reduces configuration errors and ensures consistent security implementation.
+
+**Links to Week 6 (Performance Evaluation):**  
+The performance testing strategy developed this week defines the metrics, tools, and testing methodology that will be used during performance evaluation. This ensures that baseline and load testing in Week 6 are structured, repeatable, and comparable.
+
+**Links to Week 7 (Security Audit):**  
+The threat model created in this week informs the security audit conducted in Week 7. Identified threats directly guide what is examined using tools such as Lynis and nmap, as well as which logs and configurations are prioritised during the audit process.
 
 ---
 
-## 7. Problems Encountered & Solutions
+## 7. Problems Encountered and Solutions
 
-- **Problem:** [e.g. Not sure which metric tools are appropriate]
-  - What confused me: [e.g. Too many options, conflicting advice online]
-  - How I resolved it: [e.g. Chose simple, standard tools installed by default, tried them briefly]
+**Problem:**  
+Uncertainty around which performance monitoring tools and metrics were most appropriate for a headless Linux server.
 
+**What confused me:**  
+There are many available monitoring tools, and online guidance often recommends advanced or overlapping utilities, making it difficult to identify which tools were suitable for this coursework and environment.
+
+**How I resolved it:**  
+I focused on selecting widely used, lightweight command-line tools that are commonly available on Ubuntu Server by default. I reviewed official documentation and briefly tested tools such as `top`, `free`, and `iostat` to understand their outputs before finalising the monitoring plan.
 
 ---
 
 ## 8. Reflection (Week 2)
 
-- How threat modelling changed my initial Week 1 design:
-- What I learned about planning security and performance **before** configuring:
-- How this week’s work will make Weeks 4–7 faster and more structured:
-- Any changes I would already make to my original plan after thinking about threats:
+Developing a threat model significantly changed my initial Week 1 system design by highlighting that security planning must precede configuration rather than being applied retrospectively. Identifying realistic threats clarified why controls such as firewall restrictions, SSH hardening, and mandatory access control are essential even in an isolated VirtualBox environment.
+
+This week reinforced the importance of planning both security and performance testing before implementing system changes. Defining metrics, tools, and methodologies in advance reduces ambiguity and ensures that later testing produces meaningful and comparable results.
+
+The structured planning completed this week will make Weeks 4–7 more efficient by providing clear implementation targets and evaluation criteria. After considering the identified threats, I would already refine my original plan by enforcing stricter SSH controls and prioritising automated security updates earlier in the system lifecycle.
